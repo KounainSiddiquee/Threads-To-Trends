@@ -1,0 +1,30 @@
+# Auto detect text files and normalize line endings
+* text=auto
+
+# Python
+*.py text eol=lf
+
+# HTML
+*.html text eol=lf
+
+# CSS
+*.css text eol=lf
+
+# JavaScript
+*.js text eol=lf
+
+# Markdown
+*.md text eol=lf
+
+# Images
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+
+# PowerPoint
+*.pptx binary
+
+# PDF
+*.pdf binary
