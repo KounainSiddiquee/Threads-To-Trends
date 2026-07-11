@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Threads To Trends Intelligence</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<link rel="stylesheet"
+href="https://unpkg.com/leaflet/dist/leaflet.css">
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+<div class="dashboard">
+
+<!-- Sidebar -->
+
+<aside class="sidebar">
+
+<div class="logo">
+✨ Threads
+<span>To Trends</span>
+</div>
+
+<nav>
+
+<a class="active"
+onclick="showSection('dashboardSection')">
+🏠 Dashboard
+</a>
+
+<a onclick="showSection('opportunitySection')">
+💎 Opportunities
+</a>
+
+<a onclick="showSection('digitalSection')">
+🌐 Digital Gap
+</a>
+
+<a onclick="showSection('locationSection')">
+📍 Locations
+</a>
+
+<a onclick="showSection('insightSection')">
+📈 Insights
+</a>
+
+</nav>
+
+</aside>
+
+<!-- Main Content -->
+
+<main class="main">
+
+<header>
+
+<div>
+<h1>
+Fashion Business Intelligence Dashboard
+</h1>
+
+<p>
+AI powered analysis of local fashion businesses,
+digital gaps and growth opportunities.
+</p>
+</div>
+
+<div class="badge">
+AI Analytics
+</div>
+
+</header>
+
+<!-- Dashboard -->
+
+<section id="dashboardSection"
+class="page-section active">
+
+
+<!-- KPI Cards -->
+
+<div class="cards">
+
+<div class="card">
+<p>🏪 Businesses</p>
+<h2>{{total}}</h2>
+<span>Total analyzed</span>
+</div>
+
+<div class="card">
+<p>⭐ Avg Rating</p>
+<h2>{{avg_rating}}</h2>
+<span>Customer trust</span>
+</div>
+
+<div class="card">
+<p>🌐 No Website</p>
+<h2>{{no_website}}%</h2>
+<span>Digital gap</span>
+</div>
+
+<div class="card highlight">
+<p>💎 Hidden Gems</p>
+<h2>{{hidden}}</h2>
+<span>Growth potential</span>
+</div>
+
+<div class="card">
+<p>📸 Social Reach</p>
+<h2>{{social_presence}}%</h2>
+<span>Online activity</span>
+</div>
+
+<div class="card">
+<p>🚀 Leads</p>
+<h2>{{opportunities}}</h2>
+<span>High priority</span>
+</div>
+
+</div>
+
+<div class="panel executive-panel">
+
+    <h2>🤖 AI Executive Summary</h2>
+
+    <p id="executiveSummary">
+        Generating executive insights...
+    </p>
+
+</div>
+<!-- Charts -->
+
+<div class="grid">
+
+<div class="panel">
+<h3>🌐 Website Availability</h3>
+
+<div class="chart-box">
+<canvas id="websiteChart"></canvas>
+</div>
+
+</div>
+
+
+<div class="panel">
+
+<h3>💎 Business Segments</h3>
+
+<div class="chart-box">
+<canvas id="segmentChart"></canvas>
+</div>
+
+</div>
+
+
+<div class="panel">
+
+<h3>⭐ Rating vs Opportunity</h3>
+
+<div class="chart-box">
+<canvas id="scatterChart"></canvas>
+</div>
+
+</div>
+
+</div>
+
+
+<!-- Business Explorer -->
+
+<div class="panel large">
+
+<h3>🔍 Business Explorer</h3>
+
+
+<div class="filters">
+
+<input id="searchInput"
+placeholder="Search boutique">
+
+
+<select id="websiteFilter"
+onchange="applyFilters()">
+
+<option value="">
+All Websites
+</option>
+
+<option value="missing">
+Website Missing
+</option>
+
+<option value="available">
+Website Available
+</option>
+
+</select>
+
+<select id="priorityFilter"
+onchange="applyFilters()">
+
+<option value="">
+All Priority
+</option>
+
+<option value="High">
+High Priority
+</option>
+
+<option value="Medium">
+Medium Priority
+</option>
+
+</select>
+
+</div>
+
+<div id="businessContainer"
+class="business-grid">
+</div>
+
+</div>
+
+</section>
+
+
+<!-- Opportunities -->
+
+<section id="opportunitySection"
+class="panel page-section">
+
+<h2>
+🔥 Growth Opportunity Finder
+</h2>
+
+<p>
+AI ranked businesses with maximum digital growth scope.
+</p>
+
+<div class="filters">
+
+<input id="opportunitySearch"
+placeholder="Search opportunity">
+
+<button onclick="showTopOpportunities()">
+Top Leads
+</button>
+
+<button onclick="showWebsiteMissingLeads()">
+Website Gap
+</button>
+
+</div>
+
+<div id="opportunityContainer"
+class="business-grid">
+</div>
+
+</section>
+
+
+<!-- Digital Gap -->
+<section id="digitalSection"
+class="panel page-section">
+
+<h2>🌐 Digital Gap Intelligence</h2>
+
+<p class="page-insight">
+💡 AI identified website absence as the largest contributor to low digital maturity across the analyzed fashion businesses.
+</p>
+
+<div class="cards">
+
+<div class="card">
+<p>Website Missing</p>
+<h2>{{no_website}}%</h2>
+</div>
+
+<div class="card">
+<p>Social Presence</p>
+<h2>{{social_presence}}%</h2>
+</div>
+
+<div class="card highlight">
+<p>Strategy</p>
+<h2>AI</h2>
+<span>
+Website + SEO + Social Growth
+</span>
+</div>
+
+</div>
+
+<div class="panel">
+
+    <h3>💡 Key Business Insights</h3>
+
+    <div class="business-grid">
+
+        <div class="digital-card">
+            <h3>📉 Lost Digital Reach</h3>
+            <h4>{{ no_website }}</h4>
+            <p>% of businesses are missing websites, reducing online discoverability.</p>
+        </div>
+
+        <div class="digital-card">
+            <h3>📲 Social Opportunity</h3>
+            <h4>{{ social_presence }}%</h4>
+            <p>Strong social presence exists, but many businesses still lack owned digital platforms.</p>
+        </div>
+
+        <div class="digital-card">
+            <h3>🎯 Priority Action</h3>
+            <h4>Website + SEO</h4>
+            <p>Building websites with Google Business optimization offers the highest impact.</p>
+        </div>
+
+        <div class="digital-card">
+            <h3>🚀 AI Recommendation</h3>
+            <h4>Transform Hidden Gems</h4>
+            <p>Focus on high-rated boutiques without websites for maximum digital growth.</p>
+        </div>
+
+    </div>
+
+</div>
+</section>
+
+
+<!-- Location -->
+
+<!-- LOCATION PAGE -->
+
+<section id="locationSection"
+class="panel page-section">
+
+
+<h2>
+📍 Location Intelligence Dashboard
+</h2>
+
+
+<p>
+AI analysis of business density and growth opportunities by area
+</p>
+
+<div id="map"></div>
+
+<div class="cards">
+
+
+<div class="card">
+
+<h3>
+☁️ Market Zones
+</h3>
+
+<h2 id="marketZones">
+--
+</h2>
+
+<p>
+Areas analyzed
+</p>
+
+
+</div>
+
+
+<div class="card">
+
+<h3>
+🔥 Top Opportunity Area
+</h3>
+
+<h2 id="topArea">
+--
+</h2>
+
+<p>
+Highest growth location
+</p>
+
+</div>
+
+
+</div>
+
+
+<div id="locationContainer"
+class="business-grid">
+
+</div>
+
+
+</section>
+
+<!-- Insights -->
+
+<section id="insightSection"
+class="panel page-section">
+
+<h2>
+🤖 Executive Intelligence
+</h2>
+
+<div id="executiveBox"
+class="business-grid">
+</div>
+
+<br>
+
+<h2>
+📊 Reports
+</h2>
+
+<div class="report-actions">
+
+<button onclick="downloadPPT()">
+📊 Download PPT Report
+</button>
+
+</div>
+
+<br>
+
+<div id="summaryBox"
+class="business-grid">
+</div>
+
+</section>
+
+</main>
+
+</div>
+
+
+<!-- Flask Data -->
+
+<script>
+
+const websiteData =
+{{ website_data | tojson }};
+
+const segmentData =
+{{ segment_data | tojson }};
+
+</script>
+
+
+<!-- Business Modal -->
+
+<div id="businessModal"
+class="modal">
+
+
+<div class="modal-box">
+
+<button class="close"
+onclick="closeModal()">
+×
+</button>
+
+<div id="modalContent"></div>
+
+</div>
+
+</div>
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+</body>
+
+</html>
